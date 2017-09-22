@@ -1,11 +1,4 @@
-items = [
-  { value: 2, weight: 7 },
-  { value: 5, weight: 8 },
-  { value: 4, weight: 9 },
-  { value: 9, weight: 3 },
-  { value: 8, weight: 1 }
-]
-
+# Knapsack with dynamic programming and support for repetition
 class Knapsack
   def initialize(items)
     @items = items
@@ -32,7 +25,53 @@ class Knapsack
   end
 end
 
-knapsack = Knapsack.new(items)
+# Example usage:
+#
+# items = [
+#   { value: 2, weight: 7 },
+#   { value: 5, weight: 8 },
+#   { value: 4, weight: 9 },
+#   { value: 9, weight: 3 },
+#   { value: 8, weight: 1 }
+# ]
+#
+# knapsack = Knapsack.new(items)
 
-puts "NO REPETITION: #{knapsack.pack(ARGV[0].to_i)}"
-puts "REPETITION: #{knapsack.pack(ARGV[0].to_i, true)}"
+# puts "NO REPETITION: #{knapsack.pack(ARGV[0].to_i)}"
+# puts "REPETITION: #{knapsack.pack(ARGV[0].to_i, true)}"
+
+
+# Simpler implementation of knapsack where repetition is permitted
+class KnapsackRepeat
+  def initialize(items)
+    @items = items
+  end
+
+  def pack(capacity)
+    sack = Array.new(capacity + 1, 0)
+
+    sack.count.times do |b|
+      @items.each do |item|
+        if item[:weight] <= b
+          sack[b] = [item[:value] + sack[b - item[:weight]], sack[b]].max
+        end
+      end
+    end
+
+    sack[-1]
+  end
+end
+
+# Example usage:
+#
+# items = [
+#   { value: 2, weight: 7 },
+#   { value: 5, weight: 8 },
+#   { value: 4, weight: 9 },
+#   { value: 9, weight: 3 },
+#   { value: 8, weight: 1 }
+# ]
+#
+# knapsack = KnapsackRepeat.new(items)
+
+# puts "REPETITION: #{knapsack.pack(ARGV[0].to_i)}"
